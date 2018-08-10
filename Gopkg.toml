@@ -30,4 +30,4 @@
   unused-packages = true
 
 [metadata.heroku]
-  root-package = "github.com/bhaslop/bolaso"
+  root-package = "github.com/bhaslop/bolaso/src"
