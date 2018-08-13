@@ -1,4 +1,4 @@
-package bolaso
+package main
 
 import "github.com/bhaslop/bolaso/app"
 

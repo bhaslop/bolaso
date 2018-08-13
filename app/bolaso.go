@@ -1,13 +1,22 @@
 package app
 
-import "os"
-import "github.com/gin-gonic/gin"
+import (
+	"os"
+	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+)
 
-var router *gin.Engine
+var (
+	router *gin.Engine
+)
 
 func Start() {
 	port := os.Getenv("PORT")
-	router := gin.New()
+	router = gin.New()
+	store := cookie.NewStore([]byte("something-here"))
+
+	router.Use(sessions.Sessions("login", store))
 
 	configureRouter()
 
@@ -18,6 +27,6 @@ func configureRouter() {
 	mapUrlsToControllers()
 
 	router.Use(gin.Logger())
-	router.LoadHTMLGlob("templates/**/*.tmpl.html")
+	router.LoadHTMLGlob("app/templates/**/*.tmpl.html")
 	router.Static("/static", "static")
 }
