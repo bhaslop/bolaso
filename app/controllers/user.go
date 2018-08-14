@@ -2,12 +2,10 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/sessions"
 	"net/http"
+	"github.com/bhaslop/bolaso/app/service"
 )
 
 func UserHandler(c *gin.Context) {
-	session := sessions.Default(c)
-
-	c.HTML(http.StatusOK, "user/index", session.Get("profile"))
+	c.HTML(http.StatusOK, "user/index", service.GetUserFromSession(c))
 }

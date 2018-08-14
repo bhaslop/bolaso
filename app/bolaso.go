@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
+	"encoding/gob"
 )
 
 var (
@@ -12,6 +13,8 @@ var (
 )
 
 func Start() {
+	gob.Register(map[string]interface{}{})
+
 	port := os.Getenv("PORT")
 	router = gin.New()
 	store := cookie.NewStore([]byte("something-here"))

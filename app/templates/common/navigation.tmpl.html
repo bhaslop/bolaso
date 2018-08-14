@@ -2,8 +2,13 @@
 <nav>
     <div class="container">
         <a href="/" class="logo">Bolaso</a>
+
         <ul>
-            <li></li>
+            {{if .Authenticated}}
+                <li>{{.User.nickname}}</li>
+            {{else}}
+                <li>login</li>
+            {{end}}
         </ul>
     </div>
 </nav>

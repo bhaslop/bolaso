@@ -11,6 +11,9 @@ import (
 	"encoding/base64"
 	"github.com/gin-contrib/sessions"
 	"net/url"
+	"fmt"
+	"log"
+	"github.com/bhaslop/bolaso/app/service"
 )
 
 var (
@@ -28,23 +31,25 @@ var (
 )
 
 func LoginCallbackHandler(c *gin.Context) {
-	state := c.Param("state")
-	session := sessions.Default(c)
-/*
-	session, err := app.Store.Get(c.Request, "state")
+	var stateSession string
 
-	if err != nil {
-		c.Error(err)
-		return
-	}
-*/
-	if state != session.Get("state") {
+	state := c.Query("state")
+	session := sessions.Default(c)
+
+	stateSession = session.Get("state").(string)
+
+	fmt.Println("sesseion: " + stateSession)
+	fmt.Println("param: " + state)
+
+	if state != stateSession {
 		panic("Invalid state parameter")
 	}
 
-	code := c.Param("code")
+	code := c.Query("code")
 
 	token, err := authConfig.Exchange(context.TODO(), code)
+
+	fmt.Println(token)
 
 	if err != nil {
 		c.Error(err)
@@ -55,7 +60,11 @@ func LoginCallbackHandler(c *gin.Context) {
 
 	resp, err := client.Get("https://" + authDomain + "/userinfo")
 
+	fmt.Println("Getting userinfo...")
+
 	if err != nil {
+		fmt.Println("Error con userinfo get")
+		log.Panic(err)
 		c.Error(err)
 		return
 	}
@@ -64,13 +73,11 @@ func LoginCallbackHandler(c *gin.Context) {
 
 	var profile map[string]interface{}
 
-
-
 	if err = json.NewDecoder(resp.Body).Decode(&profile); err != nil {
+		fmt.Println("Error parsing body!")
 		c.Error(err)
 		return
 	}
-
 
 	session.Set("id_token", token.Extra("id_token"))
 	session.Set("access_token", token.AccessToken)
@@ -79,9 +86,13 @@ func LoginCallbackHandler(c *gin.Context) {
 	err = session.Save()
 
 	if err != nil {
+		fmt.Println("Error saving session")
+		fmt.Println(err)
 		c.Error(err)
 		return
 	}
+
+	fmt.Println("Redirecting...")
 
 	c.Redirect(http.StatusSeeOther, "/user")
 }
@@ -138,18 +149,14 @@ func LogoutHandler(c *gin.Context) {
 
 func IsAuthenticatedMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		IsAuthenticated(c)
+		if IsAuthenticated(c) {
+			c.Next()
+		} else {
+			c.Redirect(http.StatusTemporaryRedirect, "/login")
+		}
 	}
 }
 
-func IsAuthenticated(c *gin.Context) {
-	session := sessions.Default(c)
-
-	profile := session.Get("profile")
-
-	if profile != nil {
-		c.Next()
-	} else {
-		c.Redirect(http.StatusTemporaryRedirect, "/")
-	}
+func IsAuthenticated(c *gin.Context) bool {
+	return service.GetUserFromSession(c) != nil
 }
