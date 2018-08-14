@@ -6,13 +6,13 @@ import (
 )
 
 func GetHome(c *gin.Context) {
-	model := new(map[string]interface{})
+	model := make(map[string]interface{})
 
 	if IsAuthenticated(c) {
-		(*model)["User"] = service.GetUserFromSession(c)
-		(*model)["Authenticated"] = true
+		model["User"] = service.GetUserFromSession(c)
+		model["Authenticated"] = true
 	} else {
-		(*model)["Authenticated"] = false
+		model["Authenticated"] = false
 	}
 
 	c.HTML(200, "home/index", model)
