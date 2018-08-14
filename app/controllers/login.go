@@ -10,13 +10,14 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"github.com/gin-contrib/sessions"
+	"net/url"
 )
 
 var (
 	authDomain = os.Getenv("AUTH0_DOMAIN")
 	authConfig = &oauth2.Config{
-		ClientID:     os.Getenv("lQGzQJd072ibf1HWr2QtSRL33zUE9f4e"),
-		ClientSecret: os.Getenv("YOUR_CLIENT_SECRET"),
+		ClientID:     os.Getenv("AUTH0_CLIENT_ID"),
+		ClientSecret: os.Getenv("AUTH0_CLIENT_SECRET"),
 		RedirectURL:  os.Getenv("AUTH0_CALLBACK_URL"),
 		Scopes:       []string{"openid", "profile"},
 		Endpoint: oauth2.Endpoint{
@@ -112,4 +113,43 @@ func LoginHandler(c *gin.Context) {
 	url := authConfig.AuthCodeURL(state, audience)
 
 	c.Redirect(http.StatusTemporaryRedirect, url)
+}
+
+func LogoutHandler(c *gin.Context) {
+	var Url *url.URL
+
+	Url, err := url.Parse("https://" + authDomain)
+
+	if err != nil {
+		panic("boom")
+	}
+
+	Url.Path += "/v2/logout"
+
+	parameters := url.Values{}
+
+	parameters.Add("returnTo", os.Getenv("AUTH0_CALLBACK_URL"))
+	parameters.Add("client_id", os.Getenv("AUTH0_CLIENT_ID"))
+
+	Url.RawQuery = parameters.Encode()
+
+	c.Redirect(http.StatusTemporaryRedirect, Url.String())
+}
+
+func IsAuthenticatedMiddleWare() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		IsAuthenticated(c)
+	}
+}
+
+func IsAuthenticated(c *gin.Context) {
+	session := sessions.Default(c)
+
+	profile := session.Get("profile")
+
+	if profile != nil {
+		c.Next()
+	} else {
+		c.Redirect(http.StatusTemporaryRedirect, "/")
+	}
 }

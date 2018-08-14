@@ -3,11 +3,18 @@ package app
 import "github.com/bhaslop/bolaso/app/controllers"
 
 func mapUrlsToControllers() {
-	router.GET("/", controllers.GetHome)
+	public := router.Group("/")
+	private := router.Group("/")
+
+	private.Use(controllers.IsAuthenticatedMiddleWare())
+
+	public.GET("/", controllers.GetHome)
+	private.GET("/user", controllers.UserHandler)
 
 
 	//login
-	router.GET("/login", controllers.LoginHandler)
-	router.GET("/callback", controllers.LoginCallbackHandler)
-	router.POST("/callback", controllers.LoginCallbackHandler)
+	public.GET("/login", controllers.LoginHandler)
+	public.GET("/callback", controllers.LoginCallbackHandler)
+	public.POST("/callback", controllers.LoginCallbackHandler)
+	router.GET("/logout", controllers.LogoutHandler)
 }
