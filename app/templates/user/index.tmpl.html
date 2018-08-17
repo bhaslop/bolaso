@@ -4,10 +4,10 @@
         {{ template "header" }}
     </head>
     <body>
-        {{ template "navigation" }}
+        {{ template "navigation" .}}
         <div>
-            <img class="avatar" src="{{.picture}}"/>
-            <h2>Welcome {{.nickname}}</h2>
+            <h4>Welcome {{.User.nickname}}</h4>
+            <p>{{.User.name}}</p>
         </div>
     </body>
 </html>

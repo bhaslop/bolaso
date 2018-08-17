@@ -6,7 +6,7 @@ import (
 )
 
 func GetHome(c *gin.Context) {
-	model := make(map[string]interface{})
+	model := gin.H{}
 
 	if IsAuthenticated(c) {
 		model["User"] = service.GetUserFromSession(c)

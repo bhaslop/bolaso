@@ -31,3 +31,6 @@
 
 [metadata.heroku]
   root-package = "github.com/bhaslop/bolaso"
+[[constraint]]
+  name = "github.com/mongodb/mongo-go-driver"
+  version = "0.0.11"

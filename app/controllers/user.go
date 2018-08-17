@@ -7,5 +7,15 @@ import (
 )
 
 func UserHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "user/index", service.GetUserFromSession(c))
+
+	model := gin.H{}
+
+	if IsAuthenticated(c) {
+		model["User"] = service.GetUserFromSession(c)
+		model["Authenticated"] = true
+	} else {
+		model["Authenticated"] = false
+	}
+
+	c.HTML(http.StatusOK, "user/index", model)
 }

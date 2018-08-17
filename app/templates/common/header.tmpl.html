@@ -13,28 +13,45 @@
             margin: 0;
         }
 
-        nav {
-            position: relative;
+        a, a:visited {
+            text-decoration: none;
+            color: inherit;
         }
 
-        nav .container {
-            background-color: slategray;
-            display: inline-block;
+        header {
+            position: relative;
             width: 100%;
+        }
+
+        nav {
+            background-color: slategray;
             line-height: 30px;
             padding: 10px;
         }
 
-        nav .container .logo {
+        nav .logo {
             color: #fff;
             font-weight: bold;
-            text-decoration: none;
         }
 
-        nav .container ul {
+        nav ul {
             float: right;
             margin: 0;
             list-style: none;
+        }
+
+        nav .avatar {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: top;
+            position: relative;
+            margin: 6px 6px 0 0;
+        }
+        
+        .avatar img {
+            border-radius: 50%;
+            vertical-align: top;
         }
     </style>
 </head>

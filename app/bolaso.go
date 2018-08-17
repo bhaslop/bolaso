@@ -31,5 +31,5 @@ func configureRouter() {
 
 	router.Use(gin.Logger())
 	router.LoadHTMLGlob("app/templates/**/*.tmpl.html")
-	router.Static("/static", "static")
+	router.Static("/static", "app/static")
 }

@@ -11,7 +11,6 @@ import (
 	"encoding/base64"
 	"github.com/gin-contrib/sessions"
 	"net/url"
-	"fmt"
 	"log"
 	"github.com/bhaslop/bolaso/app/service"
 )
@@ -38,9 +37,6 @@ func LoginCallbackHandler(c *gin.Context) {
 
 	stateSession = session.Get("state").(string)
 
-	fmt.Println("sesseion: " + stateSession)
-	fmt.Println("param: " + state)
-
 	if state != stateSession {
 		panic("Invalid state parameter")
 	}
@@ -48,8 +44,6 @@ func LoginCallbackHandler(c *gin.Context) {
 	code := c.Query("code")
 
 	token, err := authConfig.Exchange(context.TODO(), code)
-
-	fmt.Println(token)
 
 	if err != nil {
 		c.Error(err)
@@ -60,10 +54,7 @@ func LoginCallbackHandler(c *gin.Context) {
 
 	resp, err := client.Get("https://" + authDomain + "/userinfo")
 
-	fmt.Println("Getting userinfo...")
-
 	if err != nil {
-		fmt.Println("Error con userinfo get")
 		log.Panic(err)
 		c.Error(err)
 		return
@@ -74,7 +65,6 @@ func LoginCallbackHandler(c *gin.Context) {
 	var profile map[string]interface{}
 
 	if err = json.NewDecoder(resp.Body).Decode(&profile); err != nil {
-		fmt.Println("Error parsing body!")
 		c.Error(err)
 		return
 	}
@@ -86,14 +76,16 @@ func LoginCallbackHandler(c *gin.Context) {
 	err = session.Save()
 
 	if err != nil {
-		fmt.Println("Error saving session")
-		fmt.Println(err)
 		c.Error(err)
 		return
 	}
+/*
+	player := dao.GetPlayer(profile["name"].(string))
 
-	fmt.Println("Redirecting...")
-
+	if player == nil {
+		dao.SetPlayer(profile["name"].(string), profile["nickname"].(string))
+	}
+*/
 	c.Redirect(http.StatusSeeOther, "/user")
 }
 
@@ -159,4 +151,5 @@ func IsAuthenticatedMiddleWare() gin.HandlerFunc {
 
 func IsAuthenticated(c *gin.Context) bool {
 	return service.GetUserFromSession(c) != nil
+
 }
