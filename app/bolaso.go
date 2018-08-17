@@ -32,4 +32,12 @@ func configureRouter() {
 	router.Use(gin.Logger())
 	router.LoadHTMLGlob("app/templates/**/*.tmpl.html")
 	router.Static("/static", "app/static")
+
+	static := router.Group("/static")
+
+
+	static.Use(func(c *gin.Context) {
+		c.Header("Cache-Control", "max-age=85400")
+		c.Next()
+	})
 }
