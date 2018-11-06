@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"github.com/bhaslop/bolaso/app/service"
+	"fmt"
+	"github.com/bhaslop/bolaso/app/dao"
 )
 
 func UserHandler(c *gin.Context) {
@@ -16,6 +18,8 @@ func UserHandler(c *gin.Context) {
 	} else {
 		model["Authenticated"] = false
 	}
+
+	fmt.Println(dao.GetPlayer(model["user"].email))
 
 	c.HTML(http.StatusOK, "user/index", model)
 }
