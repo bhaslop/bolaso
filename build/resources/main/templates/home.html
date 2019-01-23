@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+   <meta charset="utf-8"></meta>
+   <title>Hola Mundo</title>
+
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="css/uikit.min.css" />
+   <script src="js/uikit.min.js"></script>
+   <script src="js/uikit-icons.min.js"></script>
+</head>
+<body>
+   <div class="uk-dark">
+      <p th:inline="text">Hola, [[${name}]]!</p>
+   </div>
+</body>
+</html>
