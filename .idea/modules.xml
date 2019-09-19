@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bhaslop-bolaso.iml" filepath="$PROJECT_DIR$/.idea/modules/bhaslop-bolaso.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/bhaslop-bolaso.iml" filepath="$PROJECT_DIR$/.idea/modules/bhaslop-bolaso.iml" group="bolaso" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/bolaso_main.iml" filepath="$PROJECT_DIR$/.idea/modules/bolaso_main.iml" group="bolaso" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/bolaso_test.iml" filepath="$PROJECT_DIR$/.idea/modules/bolaso_test.iml" group="bolaso" />
     </modules>
