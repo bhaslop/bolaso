@@ -16,6 +16,6 @@ public class HerokuDatabaseConfiguration implements EnvironmentAware {
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new Proper
+        //this.propertyResolver = new Propere
     }
 }
